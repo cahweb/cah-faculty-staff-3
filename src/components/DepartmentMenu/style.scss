@@ -1,0 +1,56 @@
+#filterBar {
+
+    margin-right: 2em;
+
+    .nav-item {
+
+        .nav-link {
+            display: inline-block;
+            color: inherit;
+            text-align: left !important;
+            margin: 0;
+            padding-left: 1em;
+        }
+    }
+}
+
+.dropdown.open {
+
+    .dropdown-menu {
+        display: block;
+        opacity: 1;
+    }
+}
+
+.dept-label {
+    display: inline-block;
+    text-align: left;
+    margin-right: 1em;
+}
+
+#subDeptFilterButton {
+    border: none;
+    border-left: 2px solid #cca300;
+
+    &:hover {
+        border: none;
+        border-left: 2px solid #cca300;
+    }
+}
+
+#name-btn {
+    border: none;
+
+    &:hover {
+        border: none;
+    }
+
+    &:focus {
+        outline: none;
+
+        &:not(:hover) {
+            color: inherit;
+            background-color: #fc0;
+        }
+    }
+}

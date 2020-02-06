@@ -1,0 +1,32 @@
+#facultyBox,
+#entryBox {
+
+    > div {
+        padding: 0;
+    }
+}
+
+#formatButtons {
+
+    .btn {
+
+        padding: 1em;
+
+        &:first-child {
+            border-radius: 10px 0px 0px 10px;
+        }
+
+        &:last-child {
+            border-radius: 0px 10px 10px 0px;
+        }
+
+        img {
+            height: 75%;
+            width: 75%;
+            object-position: center;
+            object-fit: cover;
+            zoom: 25%;
+            color: rgb(200, 200, 200);
+        }
+    }
+}

@@ -1,0 +1,18 @@
+.faculty-img {
+    height: 100%;
+
+    .detail {
+        object-fit: cover;
+        object-position: 50% 0;
+        height: 180px;
+        width: 180px;
+    }
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+.img-circle.rounded {
+    border-radius: 5px;
+}

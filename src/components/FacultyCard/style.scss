@@ -1,0 +1,79 @@
+.small {
+    font-size: smaller;
+}
+
+
+.cah-staff-list {
+
+    padding: .5em .2em;
+    margin: 0;
+    margin-bottom: 1em;
+    
+    a {
+        color: inherit;
+        text-decoration: none;
+        background-color: inherit;
+    }
+
+    &:hover {
+        background-color: rgb(225, 225, 225);
+    }
+}
+
+.staff-list {
+
+    div {
+        
+        p {
+            margin: 0;
+            line-height: 1.3em;
+        }
+
+        .staff-name {
+            margin-bottom: .3em;
+        }
+
+        .staff-email {
+
+            a {
+                text-decoration: initial;
+                z-index: 1;
+            }
+        }
+
+        .staff-title {
+            margin-bottom: .2em;
+        }
+    }
+}
+
+.format-picture {
+
+    .fs-list,
+    .staff-title {
+        font-size: 110%;
+    }
+}
+
+.faculty-card {
+
+    &.col-lg-3 {
+        padding: 0.5em 0.5em;
+    }
+
+    &.col-lg-4 {
+        padding: 0.5em 1em;
+    }
+}
+
+.tier-label {
+    
+    &:not(:first-child) {
+
+        margin-top: 2em;
+
+        .row-title {
+            border-top: 4px solid #fc0;
+        }
+    }
+}

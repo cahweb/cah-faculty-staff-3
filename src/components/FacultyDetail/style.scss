@@ -1,0 +1,10 @@
+.media-body {
+
+    p {
+        margin: 0;
+
+        &:not(.staff-title) {
+            font-size: .8em;
+        }
+    }
+}
