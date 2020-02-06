@@ -14,7 +14,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
         use databaseHandlerStaticTrait;
 
         private static $plugin_name = "cah_faculty_3_";
-        private static $plugin_version = "0.0.1";
+        private static $plugin_version = "3.0.0";
 
 
         private function __construct() {} // Prevents instantiation

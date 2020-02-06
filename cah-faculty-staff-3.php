@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: CAH Faculty/Staff (Vuex)
+ * Plugin Name: CAH Faculty/Staff
  * Description: A newer, faster version of the faculty/staff plugin, powered by Vuex
  * Author: Mike W. Leavitt
- * Version: 0.0.1
+ * Version: 3.0.0
  */
 
 define( 'CAH_FACULTY_3__PLUGIN_FILE', __FILE__ );
