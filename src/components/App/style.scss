@@ -1,6 +1,9 @@
 #facultyBox,
 #entryBox {
 
+    margin-right: 0;
+    margin-left: 0;
+
     > div {
         padding: 0;
     }
@@ -28,11 +31,5 @@
             zoom: 25%;
             color: rgb(200, 200, 200);
         }
-    }
-}
-
-@media (max-width: 575px) {
-    #entryBox {
-        margin: 0 !important;
     }
 }

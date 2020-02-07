@@ -46,7 +46,8 @@
             </div>
         </nav>
         <div v-else class="dropdown btn-group">
-            <button class="btn btn-primary"
+            <button class="btn"
+                :class="'btn-' + btnColor"
                 id="name-btn"
                 @click="setMenu(selected)"
             >
@@ -55,7 +56,8 @@
                 >
                 </span>
             </button>
-            <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" 
+            <button class="btn dropdown-toggle dropdown-toggle-split" 
+                :class="'btn-' + btnColor"
                 type="button" 
                 id="subDeptFilterButton" 
                 data-toggle="dropdown" 

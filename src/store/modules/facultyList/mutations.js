@@ -19,6 +19,7 @@ export const mutations = {
         Vue.set(state, 'filterable', options.filterable);
         Vue.set(state, 'vertical', options.vertical);
         Vue.set(state, 'tiered', options.tiered);
+        Vue.set(state, 'btnColor', options.btn_color)
     },
 
     updateFormat(state, format) {

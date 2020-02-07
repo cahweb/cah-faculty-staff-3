@@ -20,7 +20,14 @@ export default {
         },
         buttonLabel() {
             
-            if (this.isAZ) return "A&ndash;Z List";
+            if (this.isAZ) {
+                if(this.tiered) {
+                    return "View All";
+                }
+                else {
+                    return "A&ndash;Z List";
+                }
+            }
             else {
                 for (const subDept of this.subDeptList) {
                     if (subDept.id == this.selected) {
@@ -36,6 +43,8 @@ export default {
         ... mapState('facultyList', [
             'vertical',
             'filterable',
+            'tiered',
+            'btnColor',
         ]),
         ... mapGetters('facultyList', [
             'pageUrl'

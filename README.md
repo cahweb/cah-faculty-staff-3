@@ -15,3 +15,13 @@ There are quite a few different attributes you can use. They are as follows:
 * `include_interests`: Whether to include a shortened version of each faculty member's listed research interests, if any. Defaults to `false`.
 * `vertical`: Determines whether the filter menu appears to the left of the faculty display or above it. Defaults to `false`.
 * `tiered`: Determines whether to sort the entries by Full-Time, Part-Time, and Staff categories. Works best with `format` set to `'picture'` and `filterable` set to `false`. Defaults to `false`.
+* `btn_color`: Determines which button color class to attach to the filter buttons, corresponding to the color classes defined in the [Athena Framework](https://ucf.github.io/Athena-Framework/components/buttons/). Default is `primary`. Other options are:
+  * `default`
+  * `secondary`
+  * `complementary`
+  * `success`'
+  * `info`
+  * `warning`
+  * `danger`
+  * `inverse`
+  * `link`

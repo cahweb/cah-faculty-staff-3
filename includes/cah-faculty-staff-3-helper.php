@@ -87,6 +87,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                 'filterable' => 'true',
                 'vertical' => 'false',
                 'tiered' => 'false',
+                'btn_color' => 'primary',
             ), $atts );
 
             foreach( $a as $key => $value ) {
