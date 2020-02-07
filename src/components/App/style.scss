@@ -30,3 +30,9 @@
         }
     }
 }
+
+@media (max-width: 575px) {
+    #entryBox {
+        margin: 0 !important;
+    }
+}

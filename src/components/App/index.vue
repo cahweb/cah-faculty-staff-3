@@ -9,7 +9,7 @@
                     class="btn btn-default"
                     :class="{active: (format == 'picture')}"
                     id="picBtn"
-                    @click="switchFormat('picture')"
+                    @click.prevent="switchFormat('picture')"
                 >
                     <img :src="distUrl + 'img/address-card-solid.svg'" aria-hidden="true">
                 </button>
@@ -17,7 +17,7 @@
                     class="btn btn-default"
                     :class="{active: (format == 'a-z')}"
                     id="azBtn"
-                    @click="switchFormat('a-z')"
+                    @click.prevent="switchFormat('a-z')"
                 >
                     <img :src="distUrl + 'img/list-alt-solid.svg'" aria-hidden="true">
                 </button>
@@ -31,8 +31,8 @@
         >
             <div class="row" id="entryBox">
                 <faculty v-for="id in displayList" :key="id" 
-                :person="personList[id]" 
-                @click.prevent="setDetailUser(id)">
+                    :person="personList[id]" 
+                >
                 </faculty>
             </div>
         </div>

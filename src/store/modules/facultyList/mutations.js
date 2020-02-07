@@ -1,4 +1,4 @@
-/*eslint no-console: 1*/
+
 
 import Vue from 'vue';
 
@@ -25,8 +25,8 @@ export const mutations = {
         Vue.set(state, 'format', format);
     },
 
-    updateDetailUser(state, userId) {
-        Vue.set(state, 'detailUser', userId);
+    updateDetailUser(state, payload) {
+        Vue.set(state, 'detailUser', payload.userId);
     },
 
     updateUserDetails(state, payload) {

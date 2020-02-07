@@ -1,6 +1,6 @@
 /* eslint no-console: 1 */
 
-import {mapState, mapGetters, mapActions} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
 import FacultyHeadshot from '../FacultyHeadshot';
 
 export default {
@@ -110,10 +110,4 @@ export default {
             'pageUrl',
         ])
     },
-
-    methods: {
-        ...mapActions('facultyList', [
-            'setDetailUser',
-        ]),
-    }
 }

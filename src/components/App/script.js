@@ -58,7 +58,7 @@ export default {
 
             switch(key) {
                 case 'id':
-                    if (Object.keys(this.personList).includes(value)) {
+                    if (0 != value && Object.keys(this.personList).includes(value)) {
                         found = true;
                         this.$store.dispatch('facultyList/setDetailUser', value);
                     }

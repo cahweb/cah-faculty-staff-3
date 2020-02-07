@@ -24,7 +24,6 @@ export const actions = {
     },
 
     async filterPersonList({commit, dispatch, state, rootState}, subDept) {
-
         if (subDept == 0 && (!state.tiered || 'a-z' == state.format)) {
             dispatch('azList', state.personList);
             commit('updateFormat', 'a-z');
@@ -60,9 +59,6 @@ export const actions = {
             const testResult = (pattern.test(subject.title[subDept]) 
                 || (0 == subDept && pattern.test(Object.entries(subject.title)[0])) 
                 || (!titleOnly && pattern.test(Object.entries(subject.titleDept)[0])));
-
-            console.log("Testing " + subject.fullName + " vs " + pattern);
-            console.log(testResult);
             return testResult;
         }
 
@@ -164,7 +160,7 @@ export const actions = {
             commit('updateFormat', 'picture');
         }
         commit('updateDisplayList', displayList);
-        commit('updateDetailUser', 0);
+        commit('updateDetailUser', { userId: 0 });
     },
 
     async azList({commit}, personList) {
@@ -212,9 +208,11 @@ export const actions = {
         commit('updateUserDetails', {userId, details});
     },
 
-    async setDetailUser({commit, dispatch}, userId) {
-        if (userId > 0) dispatch('getUserDetails', userId);
-        commit('updateDetailUser', userId);
+    setDetailUser({commit, dispatch}, userId) {
+        if (parseInt(userId) > 0) {
+            dispatch('getUserDetails', userId);
+        }
+        commit('updateDetailUser', { userId });
     },
 
     getInitData({commit, dispatch}) {
@@ -242,7 +240,8 @@ export const actions = {
         commit('updatePersonList', facultyList);
         commit('updateDisplayList', displayList);
     },
-    async changeFormat({commit, dispatch}, format) {
+
+    changeFormat({commit, dispatch}, format) {
         dispatch('setDetailUser', 0);
         commit('updateFormat', format);
     },

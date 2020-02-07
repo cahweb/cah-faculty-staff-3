@@ -13,7 +13,7 @@ new Vue({
     this.$store.dispatch('facultyList/getInitData');
   },
   mounted() {
-    if (this.$store.state.facultyList.tiered) {
+    if (this.$store.state.facultyList.tiered && this.$store.state.facultyList.detailUser == 0) {
       this.$store.dispatch('facultyList/filterPersonList', 0);
     }
 
