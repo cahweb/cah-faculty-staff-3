@@ -11,15 +11,15 @@ There are quite a few different attributes you can use. They are as follows:
 * `dept`: As mentioned above, this is the department number for the department whose faculty you want to display.
 * `img_format`: This determines how faculty portraits appear. For the moment, the two settings are `circle` for a circular portrait and `rounded` for a rounded square. Defaults to `circle`.
 * `filterable`: This determines whether the filter menu appears on the left-hand side of the page, for sorting faculty by subdepartment. If set to `false`, there will be two buttons at the top which will allow the user to switch between a list with portraits or a simple, text-based list. Defaults to `true`.
-* `format`: Determines whether the alphabetically-sorted list of faculty members which first appears includes faculty portraits. Recognized values are either `a-z` or `picture`. Defaults to `a-z`. *Note: the `picture` setting works best if `filterable` is set to `false`.*
+* `format`: Determines whether the alphabetically-sorted list of faculty members which first appears includes faculty portraits. Recognized values are either `a-z` or `picture`. Defaults to `a-z`. *Note: the `picture` setting works best if `filterable` is set to `false` or `vertical` is set to `true`.*
 * `include_interests`: Whether to include a shortened version of each faculty member's listed research interests, if any. Defaults to `false`.
 * `vertical`: Determines whether the filter menu appears to the left of the faculty display or above it. Defaults to `false`.
-* `tiered`: Determines whether to sort the entries by Full-Time, Part-Time, and Staff categories. Works best with `format` set to `'picture'` and `filterable` set to `false`. Defaults to `false`.
+* `tiered`: Determines whether to sort the entries by Full-Time, Part-Time, and Staff categories. Defaults to `false`. *Note: Works best with `format` set to `'picture'` and `filterable` set to `false`.*
 * `btn_color`: Determines which button color class to attach to the filter buttons, corresponding to the color classes defined in the [Athena Framework](https://ucf.github.io/Athena-Framework/components/buttons/). Default is `primary`. Other options are:
   * `default`
   * `secondary`
   * `complementary`
-  * `success`'
+  * `success`
   * `info`
   * `warning`
   * `danger`

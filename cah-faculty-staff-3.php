@@ -2,7 +2,9 @@
 /**
  * Plugin Name: CAH Faculty/Staff
  * Description: A newer, faster version of the faculty/staff plugin, powered by Vuex
+ * Plugin URI: https://github.com/cahweb/cah-faculty-staff-3
  * Author: Mike W. Leavitt
+ * Author URI: https://github.com/Tig3r4ce
  * Version: 3.0.0
  */
 
