@@ -17,16 +17,6 @@ require_once 'includes/cah-faculty-staff-3-helper.php';
 register_activation_hook( CAH_FACULTY_3__PLUGIN_FILE, array( 'CAHFacultyStaffHelper3', 'plugin_activate') );
 register_deactivation_hook( CAH_FACULTY_3__PLUGIN_FILE, array( 'CAHFacultyStaffHelper3', 'plugin_deactivate' ) );
 
-add_action( 'plugins_loaded', function() {
-    if( !defined( 'DEPT' ) ) {
-        $dept = get_option( 'cah_faculty_3_dept' );
-    
-        if( !empty( $dept ) ) {
-            define( 'DEPT', $dept );
-        }
-        else exit( 'DEPT constant not defined and option not set.' );
-    }
-}, 0, 10);
 add_action( 'init', array( 'CAHFacultyStaffHelper3', 'setup' ), 0, 10 );
 
 ?>

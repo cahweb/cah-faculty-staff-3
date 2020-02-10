@@ -12,7 +12,7 @@ if( !class_exists( 'CAHFacultyStaffConfig3' ) ) {
         );
 
         public static function config() {
-            self::_add_options();
+            //self::_add_options();
         }
 
 
@@ -22,19 +22,12 @@ if( !class_exists( 'CAHFacultyStaffConfig3' ) ) {
 
 
         private static function _add_options() {
-            extract( self::$_option_defaults );
-
-            add_option( self::$option_prefix . 'dept', $dept );
-            add_option( self::$option_prefix . 'interests', $dept );
-            add_option( self::$option_prefix . 'img_type', $img_type );
+            // Add any necessary options here.
         }
 
 
         private static function _delete_options() {
-
-            delete_option( self::$option_prefix . 'dept' );
-            delete_option( self::$option_prefix . 'interests' );
-            delete_option( self::$option_prefix . 'img_type' );
+            // Delete unnecesary options here.
         }
     }
 }
