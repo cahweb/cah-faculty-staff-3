@@ -15,6 +15,7 @@ const state = {
     includeInterests: false,
     detailUser: 0,
     imgFormat: '',
+    imgSize: 2,
     btnColor: 'primary',
     // WpVars object passed from WordPress via wp_localize_script()
     distUrl: wpVars.distUrl,

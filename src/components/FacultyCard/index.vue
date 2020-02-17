@@ -9,7 +9,11 @@
         <div class="cah-staff-list">
             <a :href="pageUrl + '?id=' + person.id">
                 <div class="staff-list d-flex">
-                    <faculty-headshot v-if="!isAZ" :src="person.photoUrl" :fullname="person.fullName"></faculty-headshot>
+                    <faculty-headshot v-if="!isAZ" 
+                        :src="person.photoUrl" 
+                        :fullname="person.fullName"
+                    >
+                    </faculty-headshot>
                     <div class="d-flex flex-column"
                         :class="{'format-picture': (format == 'picture')}"
                     >

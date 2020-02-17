@@ -25,11 +25,12 @@ export default {
             return !!this.src;
         },
         size() {
-            return this.isDetail ? 2 : 2;
+            return this.isDetail ? 2 : this.imgSize;
         },
         ... mapState('facultyList', [
             'imgFormat',
             'detailUser',
+            'imgSize',
         ]),
     }
 }

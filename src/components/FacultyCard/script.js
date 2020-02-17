@@ -102,6 +102,7 @@ export default {
             'filterable',
             'vertical',
             'tiered',
+            'imgSize',
         ]),
         ... mapState('subdepartments', [
             'selected',
