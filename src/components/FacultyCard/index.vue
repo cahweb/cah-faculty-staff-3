@@ -8,7 +8,7 @@
     >
         <div class="cah-staff-list">
             <a :href="pageUrl + '?id=' + person.id">
-                <div class="staff-list d-flex">
+                <div class="staff-list d-flex align-items-center">
                     <faculty-headshot v-if="!isAZ" 
                         :src="person.photoUrl" 
                         :fullname="person.fullName"
