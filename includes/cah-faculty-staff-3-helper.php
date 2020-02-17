@@ -82,7 +82,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             $a = shortcode_atts( array(
                 'format' => 'a-z',
                 'include_interests' => 'false',
-                'dept' => DEPT,
+                'dept' => 11,
                 'img_format' => 'circle',
                 'filterable' => 'true',
                 'vertical' => 'false',
@@ -339,11 +339,18 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                         $prev_id = $row['id'];
                     }
 
-                    $faculty_list[$row['id']]['subDept'][ strval( $row['subDept'] ) ] = $row['subDeptName'];
-                    $faculty_list[$row['id']]['title'][ strval( $row['subDept'] ) ] = $row['title'];
-                    $faculty_list[$row['id']]['titleDept'][ strval( $row['subDept'] ) ] = $row['titleDept'];
-                    $faculty_list[$row['id']]['titleDeptShort'][ strval( $row['subDept'] ) ] = $row['titleDeptShort'];
-                    $faculty_list[$row['id']]['titleGroup'][ strval( $row['subDept'] ) ] = $row['titleGroup'];
+                    if( is_null( $row['subDept'] ) ) {
+                        $subDept = $dept;
+                    }
+                    else {
+                        $subDept = $row['subDept'];
+                    }
+
+                    $faculty_list[$row['id']]['subDept'][ strval( $subDept ) ] = $row['subDeptName'];
+                    $faculty_list[$row['id']]['title'][ strval( $subDept ) ] = $row['title'];
+                    $faculty_list[$row['id']]['titleDept'][ strval( $subDept ) ] = $row['titleDept'];
+                    $faculty_list[$row['id']]['titleDeptShort'][ strval( $subDept ) ] = $row['titleDeptShort'];
+                    $faculty_list[$row['id']]['titleGroup'][ strval( $subDept ) ] = $row['titleGroup'];
                 }
 
                 mysqli_free_result( $result );
