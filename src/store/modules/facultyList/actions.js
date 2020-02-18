@@ -67,7 +67,7 @@ export const actions = {
             programDirs = [];
 
         const dirFilter = person => {
-            if(titleTest(/Director/, person, true)) {
+            if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id)) {
                 directors.push(person);
                 return false;
             }
