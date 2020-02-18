@@ -38,12 +38,13 @@ export default {
 
             // Special case for weird SVAD titles
             if( 22 == this.dept 
-                && /director/i.test(this.person.title[selected]) 
+                && (/director/i.test(this.person.title[selected]) 
+                    || /advisor/i.test(this.person.title[selected])) 
                 && (this.person.titleDeptShort[selected].length > 0 
                     || this.person.titleDept[selected].length > 0
                     )
             ) {
-                return `${this.person.title[selected]}, ${this.person.titleDeptShort[selected] ? this.person.titleDeptShort[selected] : this.person.titleDept[selected]}`;
+                return `${this.person.title[selected]} ${this.person.titleDeptShort[selected] ? this.person.titleDeptShort[selected] : this.person.titleDept[selected]}`;
             }
             else {
                 return this.person.titleDeptShort[selected] 
