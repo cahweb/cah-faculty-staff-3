@@ -115,6 +115,7 @@ export default {
             'vertical',
             'tiered',
             'imgSize',
+            'dept',
         ]),
         ... mapState('subdepartments', [
             'selected',
