@@ -25,3 +25,4 @@ There are quite a few different attributes you can use. They are as follows:
   * `danger`
   * `inverse`
   * `link`
+* `size`: An integer representing the size to resize faculty photos to in list mode (*i.e.*, when not showing a single faculty member's details). Defaults to 2.

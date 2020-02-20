@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * A static helper class meant to manage any kind of setup we might need
+ * to do. Doesn't actually do a whole lot, at the moment.
+ * 
+ * @author Mike W. Leavit
+ * @version 3.0.0
+ */
 if( !class_exists( 'CAHFacultyStaffConfig3' ) ) {
     class CAHFacultyStaffConfig3
     {
