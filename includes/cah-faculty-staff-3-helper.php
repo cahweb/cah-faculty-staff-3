@@ -18,9 +18,15 @@ require_once 'cah-faculty-staff-3-admin.php';
 require_once 'cah-faculty-staff-3-config.php';
 
 // Require the base class, interface, and trait we'll be using.
-require_once 'lib/class-abstract-wordpress-plugin-helper.php';
-require_once 'lib/interface-database-handler.php';
-require_once 'lib/trait-database-handler.php';
+if( !class_exists( 'WordPressPluginHelper' ) ) {
+    require_once 'lib/class-abstract-wordpress-plugin-helper.php';
+}
+if( !interface_exists( 'DatabaseHandlerStatic' ) ) {
+    require_once 'lib/interface-database-handler.php';
+}
+if( !trait_exists( 'databaseHandlerStaticTrait' ) ) {
+    require_once 'lib/trait-database-handler.php';
+}
 
 if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
     class CAHFacultyStaffHelper3 extends WordPressPluginHelper implements DatabaseHandlerStatic
