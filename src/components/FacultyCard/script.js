@@ -56,10 +56,12 @@ export default {
         },
 
         isChair() {
+            console.log(this.person.fullName + ': ' + this.person.isChair);
             return this.person.isChair != undefined ? true : false;
         },
 
         isDir() {
+            console.log(this.person.fullName + ': ' + this.person.isDir);
             return this.person.isDir != undefined ? true : false;
         },
 
