@@ -143,7 +143,7 @@ export const actions = {
             if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id)) {
 
                 if (titleTest(/Program\sDirector/, person, true)) {
-                    return false;
+                    return true;
                 }
 
                 person.isDir = true;
