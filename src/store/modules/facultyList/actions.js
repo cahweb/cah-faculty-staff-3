@@ -63,7 +63,7 @@ export const actions = {
         // subdepartment
         const tmpList = Object.values(state.personList).filter(person => {
             if (["fullTime", "partTime", "staff"].includes(person.id)) {
-                continue;
+                return false;
             }
 
             for (const dept in person.subDept) {
@@ -141,12 +141,14 @@ export const actions = {
             // UCF Art Gallery," and is the one case that throws
             // LITERALLY EVERYTHING I BUILT out of whack. (Rude!)
             if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id)) {
+                person.isDir = true;
                 directors.push(person);
                 return false;
             }
 
             // Chairs come next
             else if(titleTest(/Chair/, person)) {
+                person.isChair = true;
                 chairs.push(person);
                 return false;
             }
