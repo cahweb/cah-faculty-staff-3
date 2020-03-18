@@ -56,17 +56,11 @@ export default {
         },
 
         isChair() {
-            if (this.person.isChair !== undefined) {
-                return this.person.isChair;
-            }
-            return false;
+            return this.person.isChair != undefined ? this.person.isChair : false;
         },
 
         isDir() {
-            if (this.person.isDir !== undefined) {
-                return this.person.isDir;
-            }
-            return false;
+            return this.person.isDir != undefined ? this.person.isDir : false;
         },
 
         // The title we display for the faculty member. Because of
