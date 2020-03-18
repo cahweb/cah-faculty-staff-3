@@ -532,7 +532,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                             'id'             => $row['id'],
                             'fullName'       => $row['fullName'],
                             'email'          => $row['email'],
-                            'phone'          => self::_format_phone_us( $row['phone'] ),
+                            'phone'          => isset( $row['phone'] ) ? self::_format_phone_us( $row['phone'] ) : '',
                             'photoUrl'       => ( 
                                 !empty( $row['photoUrl'] ) 
                                 ? $row['photoUrl'] 
@@ -576,12 +576,37 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                     // Set the entry in the list of subdepartments the
                     // faculty member is affiliated with
                     $faculty_list[$row['id']]['subDept'][ strval( $subDept ) ] = $row['subDeptName'];
+
+                    // Having some weird title discrepancies, so we're going to make this a bit more
+                    // complicated--but (hopefully!) more thorough.
+
+                    // Shove the title fields into an array
+                    $titles = array(
+                        'title' => $faculty_list[$row['id']]['title'],
+                        'titleDept' => $faculty_list[$row['id']]['titleDept'],
+                        'titleDeptShort' => $faculty_list[$row['id']]['titleDeptShort'],
+                    );
+
+                    // Loop through them and, if they're set, run _maybe_add_title() to determine if
+                    // they need a new title field added
+                    foreach( $titles as $type => $field ) {
+                        if( !is_null( $row[$type] ) && isset( $field[ strval( $subDept ) ] ) ) {
+                            $faculty_list[$row['id']][$type] = self::_maybe_add_title( $row[$type], $subDept, $field);
+                        }
+                        else {
+                            $faculty_list[$row['id']][$type][ strval( $subDept ) ] = $row[$type];
+                        }
+                    }
+
+                    /*
                     // Set their title, sorted by subdepartment
                     $faculty_list[$row['id']]['title'][ strval( $subDept ) ] = $row['title'];
                     // Set their program title, sorted by subdepartment
                     $faculty_list[$row['id']]['titleDept'][ strval( $subDept ) ] = $row['titleDept'];
                     // Set their short program title, too
                     $faculty_list[$row['id']]['titleDeptShort'][ strval( $subDept ) ] = $row['titleDeptShort'];
+                    */
+
                     // Set their faculty classification
                     $faculty_list[$row['id']]['titleGroup'][ strval( $subDept ) ] = $row['titleGroup'];
                 }
@@ -1007,6 +1032,52 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             }
 
             return $term; // Return whatever we've come up with.
+        }
+
+
+        /**
+         * Check to see if we need to turn a particular title field into an array of titles,
+         * if the faculty member has more than one
+         *
+         * @param string $value
+         * @param integer $subDept
+         * @param string|array $container
+         * @return void
+         */
+        private static function _maybe_add_title( string $value, int $subDept, $container) {
+
+            // If the $container isn't empty and we have an entry for the subDept already...
+            if( !empty( $container ) && isset( $container[$subDept] ) ) {
+
+                // If it's not yet an array, we might need to make it one, if the values
+                // don't match
+                if( !is_array( $container[$subDept] ) ) {
+
+                    // If the values are different, make an array out of the two values
+                    if( strcmp($container[$subDept], $value) != 0 ) {
+                        $new_arr = array(
+                            $container[$subDept],
+                            $value,
+                        );
+
+                        // Assign the new array to the $container at the index $subDept
+                        $container[$subDept] = $new_arr;
+                    }
+                }
+
+                // If it IS an array...
+                else {
+                    // Check to see if the value is in there already. If not, add it.
+                    if( !in_array( $value, $container[$subDept] ) ) {
+                        $container[$subDept][] = $value;
+                    }
+                }
+            }
+            // Otherwise just assign the darned value
+            else $container[$subDept] = $value;
+
+            // Return the modified $container
+            return $container;
         }
     }
 }

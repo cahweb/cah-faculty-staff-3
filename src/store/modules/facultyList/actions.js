@@ -141,6 +141,14 @@ export const actions = {
             // UCF Art Gallery," and is the one case that throws
             // LITERALLY EVERYTHING I BUILT out of whack. (Rude!)
             if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id)) {
+
+                if (titleTest(/Assistant\sDirector/, person, true)) {
+                    if( directors.filter(per => /^Director$/.test(per.title)).length > 0) {
+                        if ( directors.length == 1 ) {
+                            directors.splice(1, 0, person);
+                        }
+                    }
+                }
                 directors.push(person);
                 return false;
             }
