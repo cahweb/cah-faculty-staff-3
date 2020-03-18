@@ -55,6 +55,20 @@ export default {
             }
         },
 
+        isChair() {
+            if (this.person.isChair !== undefined) {
+                return this.person.isChair;
+            }
+            return false;
+        },
+
+        isDir() {
+            if (this.person.isDir !== undefined) {
+                return this.person.isDir;
+            }
+            return false;
+        },
+
         // The title we display for the faculty member. Because of
         // the way the CAH db is organized, this can get...a bit messy.
         displayTitle() {
@@ -62,6 +76,9 @@ export default {
             // We'll be referring to this a lot, so we'll make it
             // slightly shorter
             let selected = this.selected;
+
+            // The final title we'll end up returning.
+            let title = '';
 
             // If we're not showing a specific subdepartment, just
             // pick the first value arbitrarily
@@ -78,19 +95,47 @@ export default {
                     || this.person.titleDept[selected].length > 0
                     )
             ) {
-                return `${this.person.title[selected]} ${this.person.titleDeptShort[selected] ? this.person.titleDeptShort[selected] : this.person.titleDept[selected]}`;
+                title = `${this.person.title[selected]} ${this.person.titleDeptShort[selected] ? this.person.titleDeptShort[selected] : this.person.titleDept[selected]}`;
             }
 
             // Otherwise, preference returning the short program title,
             // then the full program title, and only THEN fall back on
             // the basic entry from the titles table.
             else {
-                return this.person.titleDeptShort[selected] 
+                title = this.person.titleDeptShort[selected] 
                     ? this.person.titleDeptShort[selected] 
                     : this.person.titleDept[selected] 
                         ? this.person.titleDept[selected] 
                         : this.person.title[selected];
             }
+
+            if (Array.isArray(title)) {
+                if (this.isDir) {
+                    for (const t of title) {
+                        if (/Director/.test(t)) {
+                            title = t;
+                            break;
+                        }
+                    }
+                }
+                else if (this.isChair) {
+                    for (const t of title) {
+                        if (/Chair/.test(t)) {
+                            title = t;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    title = title[0];
+                }
+            }
+
+            if (Array.isArray(title)) {
+                title = title[0];
+            }
+
+            return title;
         },
 
         // Whether we need to display a truncated list of the person's
