@@ -562,6 +562,8 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                             'edu'            => array(),
                             'pubs'           => array(),
                             'courses'        => array(),
+                            'isDir'          => false,
+                            'isChair'        => false,
                         );
 
                         // Set the current ID as the "previous" ID, for
