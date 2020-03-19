@@ -20,8 +20,7 @@ export default {
     // Data property. Empty again.
     data() {
         return {
-            personIsDir: this.person.isDir,
-            personIsChair: this.person.isChair,
+            localPerson: this.person,
         };
     },
 
@@ -59,11 +58,11 @@ export default {
         },
 
         isChair() {
-            return this.personIsChair != undefined ? true : false;
+            return this.localPerson.isChair != undefined ? true : false;
         },
 
         isDir() {
-            return this.personIsDir != undefined ? true : false;
+            return this.localPerson.isDir != undefined ? true : false;
         },
 
         // The title we display for the faculty member. Because of
