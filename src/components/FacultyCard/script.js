@@ -64,7 +64,7 @@ export default {
         },
 
         isDir() {
-            return this.person.isDir != undefined ? true : false;
+            return this.person.isDir;
         },
 
         personIsDir() {
