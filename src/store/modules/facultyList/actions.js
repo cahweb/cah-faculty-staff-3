@@ -142,10 +142,6 @@ export const actions = {
             // LITERALLY EVERYTHING I BUILT out of whack. (Rude!)
             if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id)) {
 
-                if (titleTest(/Program\sDirector/, person, true)) {
-                    return true;
-                }
-
                 person.isDir = true;
 
                 if (titleTest(/Assistant\sDirector/, person, true)) {
