@@ -19,10 +19,7 @@ export default {
 
     // Data property. Empty again.
     data() {
-        return {
-            personIsDir: this.person.isDir,
-            personIsChair: this.person.isChair,
-        };
+        return {};
     },
 
     // Computed properties
@@ -59,11 +56,19 @@ export default {
         },
 
         isChair() {
-            return this.person.isChair != undefined ? true : false;
+            return this.person.isChair;
+        },
+
+        personIsChair() {
+            return this.isChair != undefined ? true : false;
         },
 
         isDir() {
             return this.person.isDir != undefined ? true : false;
+        },
+
+        personIsDir() {
+            return this.isDir != undefined ? true : false;
         },
 
         // The title we display for the faculty member. Because of
