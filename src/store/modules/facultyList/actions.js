@@ -140,7 +140,7 @@ export const actions = {
             // SVAD Faculty, whose official title is "Assistant Director
             // UCF Art Gallery," and is the one case that throws
             // LITERALLY EVERYTHING I BUILT out of whack. (Rude!)
-            if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id)) {
+            if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id) && !titleTest(/Program\sDirector/, person, true)) {
 
                 person.isDir = true;
 
