@@ -59,11 +59,11 @@ export default {
         },
 
         isChair() {
-            return this.personIsChair != undefined ? true : false;
+            return this.person.isChair != undefined ? true : false;
         },
 
         isDir() {
-            return this.personIsDir != undefined ? true : false;
+            return this.person.isDir != undefined ? true : false;
         },
 
         // The title we display for the faculty member. Because of
@@ -234,11 +234,4 @@ export default {
             'pageUrl',
         ])
     },
-
-    watch: {
-        person() {
-            this.personIsDir = this.person.isDir;
-            this.personIsChair = this.person.isChair;
-        }
-    }
 }
