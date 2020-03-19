@@ -112,7 +112,7 @@ export default {
             }
 
             if (Array.isArray(title)) {
-                if (this.isDir) {
+                if (this.personl.isDir) {
                     for (const t of title) {
                         if (/Director/.test(t)) {
                             title = t;
@@ -120,7 +120,7 @@ export default {
                         }
                     }
                 }
-                else if (this.isChair) {
+                else if (this.person.isChair) {
                     for (const t of title) {
                         if (/Chair/.test(t)) {
                             title = t;
