@@ -55,22 +55,6 @@ export default {
             }
         },
 
-        isChair() {
-            return this.person.isChair;
-        },
-
-        personIsChair() {
-            return this.isChair != undefined ? true : false;
-        },
-
-        isDir() {
-            return this.person.isDir;
-        },
-
-        personIsDir() {
-            return this.isDir != undefined ? true : false;
-        },
-
         // The title we display for the faculty member. Because of
         // the way the CAH db is organized, this can get...a bit messy.
         displayTitle() {
@@ -112,7 +96,7 @@ export default {
             }
 
             if (Array.isArray(title)) {
-                if (this.personl.isDir) {
+                if (this.personl.isDir != undefined) {
                     for (const t of title) {
                         if (/Director/.test(t)) {
                             title = t;
@@ -120,7 +104,7 @@ export default {
                         }
                     }
                 }
-                else if (this.person.isChair) {
+                else if (this.person.isChair != undefined) {
                     for (const t of title) {
                         if (/Chair/.test(t)) {
                             title = t;
