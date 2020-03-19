@@ -96,7 +96,7 @@ export default {
             }
 
             if (Array.isArray(title)) {
-                if (this.personl.isDir != undefined) {
+                if (this.person.isDir != undefined) {
                     for (const t of title) {
                         if (/Director/.test(t)) {
                             title = t;
