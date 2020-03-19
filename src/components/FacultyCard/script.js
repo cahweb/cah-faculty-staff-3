@@ -20,7 +20,8 @@ export default {
     // Data property. Empty again.
     data() {
         return {
-            localPerson: this.person,
+            personIsDir: this.person.isDir,
+            personIsChair: this.person.isChair,
         };
     },
 
@@ -58,11 +59,11 @@ export default {
         },
 
         isChair() {
-            return this.localPerson.isChair != undefined ? true : false;
+            return this.personIsChair != undefined ? true : false;
         },
 
         isDir() {
-            return this.localPerson.isDir != undefined ? true : false;
+            return this.personIsDir != undefined ? true : false;
         },
 
         // The title we display for the faculty member. Because of
@@ -233,4 +234,11 @@ export default {
             'pageUrl',
         ])
     },
+
+    watch: {
+        person() {
+            this.personIsDir = this.person.isDir;
+            this.personIsChair = this.person.isChair;
+        }
+    }
 }
