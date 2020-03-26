@@ -46,12 +46,12 @@ export default {
             const titleList = [];
 
             for (let i = 0; i < Object.values(this.person.titleDept).length; i++) {
-                const title = Object.values(this.person.titleDept)[i];
+                const title = Array.isArray(Object.values(this.person.titleDept)[i]) ? Object.values(this.person.titleDept)[i].join(', ') : Object.values(this.person.titleDept)[i];
 
                 let tempStr = '';
 
                 if (!title) {
-                    tempStr = Object.values(this.person.title)[i];
+                    tempStr = Array.isArray(Object.values(this.person.title)[i]) ? Object.values(this.person.title)[i].join(', ') : Object.values(this.person.title)[i];
                 }
                 else {
                     tempStr += title;
