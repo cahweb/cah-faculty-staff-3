@@ -72,15 +72,17 @@ export default {
         formatEdu() {
             const edu = new DOMParser().parseFromString('<h3 class="heading-underline">Education</h3><div><ul id="edu-rows"></ul></div>', 'text/html');
 
-            for (const deg of this.person.edu) {
-                // Create a new list element
-                const newLi = edu.createElement('li');
+            if (this.person.edu.length) {
+                for (const deg of this.person.edu) {
+                    // Create a new list element
+                    const newLi = edu.createElement('li');
 
-                // Supertemplates!
-                newLi.innerHTML = deg['degree'] + (deg['field'] ? ` in ${deg['field']}` : '') + (deg['institution'] ? ` from ${deg['institution']}` : '') + (deg['year'] ? ` (${deg['year']})` : '');
+                    // Supertemplates!
+                    newLi.innerHTML = deg['degree'] + (deg['field'] ? ` in ${deg['field']}` : '') + (deg['institution'] ? ` from ${deg['institution']}` : '') + (deg['year'] ? ` (${deg['year']})` : '');
 
-                // Attach the thing
-                edu.querySelector('#edu-rows').append(newLi);
+                    // Attach the thing
+                    edu.querySelector('#edu-rows').append(newLi);
+                }
             }
 
             return edu.body.innerHTML;
@@ -95,33 +97,36 @@ export default {
 
             let type = '';
             let newList;
-            for (const [index, pub] of this.person.pubs) {
 
-                // If it's not the first element in the list and
-                // the type changes, append the now-completed <ul> 
-                // to the document
-                if (index > 0 && pubs.pubType != type) {
-                    pubDiv.append(newList);
+            if (this.person.pubs.length) {
+                for (const [index, pub] of this.person.pubs) {
+
+                    // If it's not the first element in the list and
+                    // the type changes, append the now-completed <ul> 
+                    // to the document
+                    if (index > 0 && pubs.pubType != type) {
+                        pubDiv.append(newList);
+                    }
+
+                    // If we've got a new pub type (including the first one),
+                    // we create a new heading and a <ul> to store its
+                    // entries in
+                    if (pub.pubType != type) {
+                        const newHead = pubs.createElement('h4');
+                        newHead.classList.add('pt-4');
+                        newHead.innerHTML = pub.pubType;
+                        pubDiv.append(newHead);
+
+                        newList = pubs.createElement('ul');
+                    }
+
+                    // Add the current entry
+                    const newItem = pubs.createElement('li');
+                    newItem.innerHTML = (parseInt(pub.forthcoming) ? `<em>Forthcoming</em> ` : '') + `${pub.pubDate} ` + _.unescape(pub.citation);
+                    newList.append(newItem);
+
+                    type = pub.pubType;
                 }
-
-                // If we've got a new pub type (including the first one),
-                // we create a new heading and a <ul> to store its
-                // entries in
-                if (pub.pubType != type) {
-                    const newHead = pubs.createElement('h4');
-                    newHead.classList.add('pt-4');
-                    newHead.innerHTML = pub.pubType;
-                    pubDiv.append(newHead);
-
-                    newList = pubs.createElement('ul');
-                }
-
-                // Add the current entry
-                const newItem = pubs.createElement('li');
-                newItem.innerHTML = (parseInt(pub.forthcoming) ? `<em>Forthcoming</em> ` : '') + `${pub.pubDate} ` + _.unescape(pub.citation);
-                newList.append(newItem);
-
-                type = pub.pubType;
             }
 
             // Return the HTML
