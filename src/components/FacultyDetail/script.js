@@ -98,7 +98,7 @@ export default {
             let type = '';
             let newList;
 
-            if (this.person.pubs.length) {
+            if (this.person.pubs && this.person.pubs.length > 0) {
                 for (const [index, pub] of this.person.pubs) {
 
                     // If it's not the first element in the list and
