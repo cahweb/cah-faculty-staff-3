@@ -169,7 +169,6 @@ export default {
         if (!this.hasCourseListeners && this.person.courses) {
             document.querySelectorAll('.nav.nav-tabs .nav-item .nav-link').forEach(item => {
                 item.addEventListener('shown.bs.tab', function(event) {
-                    console.log(event.relatedTarget);
                     event.relatedTarget.classList.remove('active');
                 });
             });
