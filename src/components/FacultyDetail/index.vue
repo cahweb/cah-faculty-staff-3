@@ -14,7 +14,7 @@
                     <span v-else>{{ person.room.desc + person.room.num }}</span>
                 </p>
                 <p v-else-if="!!person.location">Campus Location: {{ person.location }}</p>
-                <p v-if="!!person.hasCV">
+                <p v-if="person.hasCV === '1'">
                     <a :href="'https://cah.ucf.edu/common/files/cv/' + person.id + '.pdf'">View CV</a>
                 </p>
                 <p v-if="!!person.homepage">
