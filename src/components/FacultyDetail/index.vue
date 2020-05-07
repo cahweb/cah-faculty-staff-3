@@ -15,7 +15,7 @@
                 </p>
                 <p v-else-if="!!person.location">Campus Location: {{ person.location }}</p>
                 <p v-if="!!person.hasCV">
-                    <a :href="'https://cah.ucf.edu/common/files/cv/' + person.id">View CV</a>
+                    <a :href="'https://cah.ucf.edu/common/files/cv/' + person.id + '.pdf'">View CV</a>
                 </p>
                 <p v-if="!!person.homepage">
                     <a :href="person.homepage">View Personal Website</a>
