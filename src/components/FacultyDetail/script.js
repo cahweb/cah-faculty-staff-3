@@ -123,7 +123,7 @@ export default {
 
                     // Add the current entry
                     const newItem = pubs.createElement('li');
-                    newItem.innerHTML = (parseInt(pub.forthcoming) ? `<em>Forthcoming</em> ` : '') + `${pub.pubDate} ` + _.unescape(pub.citation);
+                    newItem.innerHTML = (parseInt(pub.forthcoming) ? `<em>Forthcoming</em> ` : '') + _.unescape(pub.citation);
                     newList.append(newItem);
 
                     type = pub.pubType;
