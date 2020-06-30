@@ -129,9 +129,9 @@ export default {
                         newItem.style.marginTop = "0em"
                     else
                         newItem.style.marginTop = "1.5em"
-                        
+
                     newItem.style.marginBottom = "1.5em"
-                    newItem.innerHTML = (parseInt(pub.forthcoming) ? `<em>Forthcoming</em> ` : '') + _.unescape(pub.citation);
+                    newItem.innerHTML = (parseInt(pub.forthcoming) ? `<em>Forthcoming</em> ` : '') + _.unescape(pub.citation).replace(/<br\s?\/?>/, "");
                     newList.append(newItem);
 
                     type = pub.pubType;
