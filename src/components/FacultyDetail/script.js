@@ -100,6 +100,7 @@ export default {
 
             if (Array.isArray(this.person.pubs) && this.person.pubs.length > 0) {
                 let index = 0;
+                let firstListItem = false
                 for (const pub of this.person.pubs) {
 
                     // If it's not the first element in the list and
@@ -119,10 +120,17 @@ export default {
                         pubDiv.append(newHead);
 
                         newList = pubs.createElement('ul');
+                        firstListItem = true
                     }
 
                     // Add the current entry
                     const newItem = pubs.createElement('li');
+                    if (firstListItem)
+                        newItem.style.marginTop = "0em"
+                    else
+                        newItem.style.marginTop = "1.5em"
+                        
+                    newItem.style.marginBottom = "1.5em"
                     newItem.innerHTML = (parseInt(pub.forthcoming) ? `<em>Forthcoming</em> ` : '') + _.unescape(pub.citation);
                     newList.append(newItem);
 
