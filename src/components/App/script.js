@@ -121,6 +121,10 @@ export default {
                     if (found) break;
                 }
             })
+            .then(()=> {
+                if (this.tiered)
+                    this.$store.dispatch('facultyList/filterPersonList', 0)
+            })
             .then(() => {this.setIsLoaded(true)})
     },
 }
