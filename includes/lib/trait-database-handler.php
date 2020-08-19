@@ -5,6 +5,10 @@
  * as a trait because this syntax and behavior is common across almost
  * all of the CAH web apps and plugins that interact with databases.
  */
+
+require_once CAH_FACULTY_3__PLUGIN_DIR . "priv/dbconfig.php";
+use UCF\CAH\WordPress\Plugins\FacultyStaff\DB;
+
 trait databaseHandlerStaticTrait
 {
     // Holds the mysqli object that represents the database connection
@@ -21,12 +25,10 @@ trait databaseHandlerStaticTrait
      */
     protected static function _db_get() : ?mysqli {
         if( is_null( self::$_db_connection ) ) {
-            global $db_server, $db_user, $db_pass, $db, $db_charset;
-
-            self::$_db_connection = mysqli_connect( $db_server, $db_user, $db_pass, $db );
+            self::$_db_connection = mysqli_connect( DB::SERVER, DB::USER, DB::PASS, DB::DB );
             
             if( self::$_db_connection !== false ) {
-                self::$_db_connection->set_charset( $db_charset );
+                self::$_db_connection->set_charset( DB::CHARSET );
             }
             else {
                 self::$_db_connection = null;

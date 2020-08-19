@@ -11,6 +11,13 @@
 
 .img-circle {
     border-radius: 50%;
+
+    &:not(.detail) {
+        height: 150px;
+        width: 150px;
+        object-fit: cover;
+        object-position: center top;
+    }
 }
 
 .img-circle.rounded {

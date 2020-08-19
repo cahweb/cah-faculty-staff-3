@@ -11,29 +11,52 @@ import _ from 'underscore';
 export const actions = {
 
     /**
-     * Get the list of faculty. I think this is technically deprecated,
-     * since we'll be loading the list of users we'll need with the
-     * page, rather than doing it asyncrhonously.
+     * Get the list of faculty.
      * 
      * @param {Function} commit Used to call mutations
      * @param {Object} state The state from the current namespace 
      */
     async getFacultyList({commit, state}) {
-        const url = state.ajaxUrl;
-        const data = {
-            action: 'get_faculty_list',
-            security: state.nonce,
-        };
-        const options = {
-            headers: {
-                'content-type': 'application/x-www-form-urlencoded'
-            },
-        };
+        const formData = new FormData()
+        formData.append('action', 'get_faculty_list')
+        formData.append('security', state.nonce)
+        formData.append('dept', state.dept)
 
-        const faculty = await axios.post(url, qs.stringify(data), options)
-            .then( response => response);
+        const facultyList = await axios.post(state.ajaxUrl, formData)
+            .then(response => response.data)
 
-        commit('updatePersonList', faculty);
+        const tempSort = Object.values(facultyList);
+
+        /*
+        const tempSort = []
+        for(const person of Object.values(facultyList)) {
+            tempSort.push(person);
+        }
+        */
+
+        // Sort alphabetically by last name, or by first name if
+        // last names are the same
+        tempSort.sort((a, b) => {
+            const lastComp = a.lname.localeCompare(b.lname);
+            if (lastComp == 0) {
+                return a.fname.localeCompare(b.fname);
+            }
+            else return lastComp;
+        });
+
+        const displayList = tempSort.map(item => item.id);
+
+        /*
+        const displayList = [];
+        tempSort.forEach(item => {
+            displayList.push(item.id);
+        });
+        */
+        
+        // Update the list of people
+        commit('updatePersonList', facultyList);
+        // Update the display list
+        commit('updateDisplayList', displayList);
     },
 
     /**
@@ -109,8 +132,8 @@ export const actions = {
         };
 
         // Test a title string against a given RegExp pattern
-        const titleTest = (pattern, subject, titleOnly = false) => {
-            
+        const titleTest = (term, subject, titleOnly = false) => {
+            const pattern = new RegExp(term)
             // Hokay, so...
             // testResult is the boolean value of any of the following:
             //      * The pattern matches the subject's title, either
@@ -120,8 +143,13 @@ export const actions = {
             //      * The pattern matches the user-defined program title,
             //          but only if titleOnly is false
             const testResult = (pattern.test(subject.title[subDept]) 
+                || (Array.isArray(subject.title[subDept]) && subject.title[subDept].includes(term))
                 || (0 == subDept && pattern.test(Object.entries(subject.title)[0])) 
                 || (!titleOnly && pattern.test(Object.entries(subject.titleDept)[0])));
+
+            if ('Director' === term && 1445 === parseInt(subject.id))
+                console.log(testResult)
+
             return testResult;
         }
 
@@ -140,11 +168,11 @@ export const actions = {
             // SVAD Faculty, whose official title is "Assistant Director
             // UCF Art Gallery," and is the one case that throws
             // LITERALLY EVERYTHING I BUILT out of whack. (Rude!)
-            if(titleTest(/Director/, person, true) && !(22 == state.dept && 96 == person.id) && !titleTest(/Program\sDirector/, person, true)) {
+            if(titleTest('Director', person, true) && !(22 == state.dept && 96 == person.id) && !titleTest('Program Director', person, true)) {
 
                 person.isDir = true;
 
-                if (titleTest(/Assistant\sDirector/, person, true)) {
+                if (titleTest('Assistant Director', person, true)) {
                     if( directors.filter(per => /^Director$/.test(per.title)).length > 0) {
                         if ( directors.length == 1 ) {
                             directors.splice(1, 0, person);
@@ -152,12 +180,17 @@ export const actions = {
                     }
                 }
 
-                directors.push(person);
+                else if (directors.length == 1)
+                    directors.splice(0, 0, person)
+
+                else
+                    directors.push(person);
+                    
                 return false;
             }
 
             // Chairs come next
-            else if(titleTest(/Chair/, person)) {
+            else if(titleTest('Chair', person)) {
                 person.isChair = true;
                 chairs.push(person);
                 return false;
@@ -165,7 +198,7 @@ export const actions = {
 
             // Then we do Program Directors, whose titles are almost
             // exclusively determined in their program titles
-            else if (titleTest(/Program\sDirector/, person)) {
+            else if (titleTest('Program Director', person)) {
 
                 // And we also have to test if they're the P.D. for 
                 // the subdepartment we're currently filtering, because
@@ -200,6 +233,9 @@ export const actions = {
 
         // Filter the list AGAIN, to pull out the Directors and Chairs
         const filterList = tmpList.filter((person) => dirFilter(person));
+
+        if (8 == subDept)
+            console.log(directors)
         
         // Stitch all those together into a single Array
         // (thank the ECMA gods for the spread operator)
@@ -222,8 +258,8 @@ export const actions = {
             // show up as "Adjunct," and any other title not in ftPatt
             // will go to the staff section
             for (const person of tmpList2) {
-                const ftPatt = /Professor|Lecturer|Instructor|Director|Chair/;
-                const ptPatt = /Adjunct/;
+                const ftPatt = 'Professor|Lecturer|Instructor|Director|Chair';
+                const ptPatt = 'Adjunct';
 
                 if (titleTest(ftPatt, person)) {
                     fullTime.push(person);
@@ -420,50 +456,16 @@ export const actions = {
     getInitData({commit, dispatch}) {
 
         // Get the options included with the shortcode call
-        const options = JSON.parse(_.unescape(document.getElementById('vueData').value));
+        const options = JSON.parse(_.unescape(document.getElementById('vueData').value))
 
-        // Get the list of subdepartments
-        const subDeptList = JSON.parse(_.unescape(document.getElementById('vueSubDept').value));
-
-        // Get the list of faculty
-        const facultyList = JSON.parse(_.unescape(document.getElementById('vueFaculty').value));
-
-        const tempSort = Object.values(facultyList);
-
-        /*
-        const tempSort = []
-        for(const person of Object.values(facultyList)) {
-            tempSort.push(person);
-        }
-        */
-
-        // Sort alphabetically by last name, or by first name if
-        // last names are the same
-        tempSort.sort((a, b) => {
-            const lastComp = a.lname.localeCompare(b.lname);
-            if (lastComp == 0) {
-                return a.fname.localeCompare(b.fname);
-            }
-            else return lastComp;
-        });
-
-        const displayList = tempSort.map(item => item.id);
-
-        /*
-        const displayList = [];
-        tempSort.forEach(item => {
-            displayList.push(item.id);
-        });
-        */
-        
         // Call the updateOptions mutation
         commit('updateOptions', options);
+
+        // Get the list of subdepartments
+        const subDeptList = JSON.parse(_.unescape(document.getElementById('vueSubDept').value))
+
         // Call the setSubDeptList action from the subdepartments module
         dispatch('subdepartments/setSubDeptList', subDeptList, {root: true});
-        // Update the list of people
-        commit('updatePersonList', facultyList);
-        // Update the display list
-        commit('updateDisplayList', displayList);
     },
 
 
@@ -479,5 +481,16 @@ export const actions = {
         dispatch('setDetailUser', 0);
         // Update the format
         commit('updateFormat', format);
+    },
+
+
+    /**
+     * Updates the status of the faculty list in the state.
+     * 
+     * @param {Function} param0 Used to call mutations
+     * @param {Boolean} isLoaded Whether the faculty list is loaded
+     */
+    async setIsLoaded({commit}, isLoaded) {
+        commit('updateIsLoaded', isLoaded)
     },
 };

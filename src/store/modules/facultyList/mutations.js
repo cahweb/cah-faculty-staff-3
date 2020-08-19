@@ -46,6 +46,7 @@ export const mutations = {
         Vue.set(state, 'tiered', options.tiered);
         Vue.set(state, 'btnColor', options.btn_color);
         Vue.set(state, 'imgSize', parseInt(options.size));
+        Vue.set(state, 'multiLevel', options.multi_level);
     },
 
     /**
@@ -89,5 +90,15 @@ export const mutations = {
 
         // Reassign the value of the personList
         Vue.set(state, 'personList', list);
-    }
+    },
+
+    /**
+     * Sets whether the faculty list has been loaded or not.
+     * 
+     * @param {Object} state A reference to the current application state
+     * @param {Boolean} isLoaded Whether the faculty list has been loaded
+     */
+    updateIsLoaded(state, isLoaded) {
+        Vue.set(state, 'isLoaded', isLoaded)
+    },
 };

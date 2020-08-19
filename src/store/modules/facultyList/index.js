@@ -21,6 +21,7 @@ const state = {
     tiered: false,
     vertical: false,
     includeInterests: false,
+    multiLevel: false,
     detailUser: 0,
     imgFormat: '',
     imgSize: 2,
@@ -29,6 +30,7 @@ const state = {
     distUrl: wpVars.distUrl,
     ajaxUrl: wpVars.ajaxUrl,
     nonce: wpVars.security,
+    isLoaded: false,
 };
 
 // We want our module to be namespaced, for the sake of encapsulation

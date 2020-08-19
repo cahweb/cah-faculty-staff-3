@@ -7,7 +7,7 @@
         :class="classObj"
     >
         <div class="cah-staff-list">
-            <a :href="pageUrl + '?id=' + person.id">
+            <a :href="pageUrl + '?id=' + person.id" @click.prevent="setDetailUser(person.id)">
                 <div class="staff-list d-flex align-items-center">
                     <faculty-headshot v-if="!isAZ" 
                         :src="person.photoUrl" 

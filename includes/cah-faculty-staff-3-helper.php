@@ -9,6 +9,8 @@
 
 // Require the db info
 require_once CAH_FACULTY_3__PLUGIN_DIR . '/priv/dbconfig.php';
+use UCF\CAH\WordPress\Plugins\FacultyStaff;
+
 // Require the main plugin file, just in case
 require_once CAH_FACULTY_3__PLUGIN_DIR . '/cah-faculty-staff-3.php';
 
@@ -60,6 +62,8 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             // Set up the AJAX handling
             add_action( 'wp_ajax_user_detail', array( __CLASS__, 'user_detail_ajax' ), 10, 0 );
             add_action( 'wp_ajax_nopriv_user_detail', array( __CLASS__, 'user_detail_ajax' ), 10, 0 );
+            add_action( 'wp_ajax_get_faculty_list', [ __CLASS__, 'get_faculty_list_ajax' ], 10, 0);
+            add_action( 'wp_ajax_nopriv_get_faculty_list', [ __CLASS__, 'get_faculty_list_ajax' ], 10, 0);
 
             // There were some plugins that were messing with my code,
             // so I deactivate them if the page requires Vue things
@@ -100,6 +104,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          * @return void
          */
         public static function register_scripts() {
+            if( is_admin() ) return;
 
             // Set up some variables to make the script calls more
             // readable
@@ -130,6 +135,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          * @return array
          */
         public static function maybe_load_scripts( array $posts ) : array {
+            if( is_admin() ) return $posts;
 
             // Check to see if our shortcode is in use
             foreach( $posts as $post ) {
@@ -156,7 +162,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          * 
          * @return string The output HTML
          */
-        public static function shortcode( $atts = array() ) : string {
+        public static function shortcode( $atts = [] ) : string {
 
             // Parse the shortcode attributes, setting default values
             // where they aren't set in the shortcode itself.
@@ -170,6 +176,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                 'tiered' => 'false',
                 'btn_color' => 'primary',
                 'size' => 2,
+                'multi_level' => 'false',
             ), $atts );
 
             // Turning string "true" and/or "false" into boolean values
@@ -180,12 +187,16 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                 }
             }
 
+            if( $a['multi_level'] ) {
+                $a['dept'] = self::_get_depts( $a['dept'] );
+            }
+
             // Get the options ready to be embedded in the page
             $data = htmlentities( json_encode( $a ) );
 
             // Grab the lists of subdepartments and faculty
             $subdept_list = htmlentities( self::_get_result_json( 'subdept', $a['dept'] ) );
-            $faculty_list = htmlentities( self::_get_result_json( 'faculty', $a['dept'] ) );
+            //$faculty_list = htmlentities( self::_get_result_json( 'faculty', $a['dept'] ) );
 
             // The inputs themselves, as well as the <div> that will
             // contain the Vue app.
@@ -193,7 +204,6 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             ?>
                 <input type="hidden" id="vueData" value="<?= $data ?>">
                 <input type="hidden" id="vueSubDept" value="<?= $subdept_list ?>">
-                <input type="hidden" id="vueFaculty" value="<?= $faculty_list ?>">
 
                 <div id="vueApp"></div>
             <?php
@@ -253,6 +263,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
 
                 case 'faculty':
                 case 'subdept':
+                case 'get-depts':
                     $dept = $args[1];
                     break;
             }
@@ -301,6 +312,20 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                 return true;
             }
             else return false;
+        }
+
+
+        public static function get_faculty_list_ajax()
+        {
+            if( !check_ajax_referer( 'faculty-staff-ajax', 'security' ) )
+                die("You need a new nonce.");
+
+            $faculty_list = self::_get_result_json( 'faculty', $_POST['dept'] );
+
+            echo $faculty_list;
+            
+            self::_db_close();
+            die();
         }
 
 
@@ -497,6 +522,12 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                 
                 // Initialize the array
                 $subdept_list = array();
+
+                $top_dept = "";
+                $matches = [];
+                preg_match( '/^\\d/', strval( $dept ), $matches );
+                if( isset( $matches[0] ) && !empty( $matches[0] ) )
+                    $top_dept = $matches[0];
                 
                 // Loop through the list and set the values of the array,
                 // using subdepartment id as the key (formatted as a 
@@ -504,7 +535,19 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                 // numerical array)
                 while( $row = mysqli_fetch_assoc( $result ) ) {
 
-                    $subdept_list[ strval( $row['id'] ) ] = $row['description'];
+                    $subdept_list[ strval( $row['id'] ) ] = [
+                        'desc' => $row['description'],
+                        'deptID' => $row['department_id'] 
+                    ];
+                    
+                    if( $row['department_id'] == $top_dept ) {
+                        $subdept_list[strval($row['id'])]['isHeader'] = true;
+                        $subdept_list[strval($row['id'])]['deptCode'] = $row['level'];
+                    }
+                    else {
+                        $subdept_list[strval($row['id'])]['isHeader'] = false;
+                    }
+                    
                 }
 
                 // Free the result memory
@@ -589,7 +632,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                     // complicated--but (hopefully!) more thorough.
 
                     // Shove the title fields into an array
-                    $titles = array(
+                    @$titles = array(
                         'title' => $faculty_list[$row['id']]['title'],
                         'titleDept' => $faculty_list[$row['id']]['titleDept'],
                         'titleDeptShort' => $faculty_list[$row['id']]['titleDeptShort'],
@@ -877,6 +920,10 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                 case 'courses':
                     $sql = self::_get_courses( $user_id, $term, $aux );
                     break;
+
+                case 'get-depts':
+                    $sql = "SELECT `level` FROM cah.academic_categories WHERE department_id = $dept ORDER BY `level`";
+                    break;
                 
                 default:
                     return null;
@@ -896,7 +943,15 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          * @return string  The completed SQL.
          */
         private static function _subdept_sql( $dept ) : string {
-            return "SELECT id, `description` FROM cah.academic_categories WHERE department_id IN( $dept, 3 ) ORDER BY (CASE WHEN id = 74 THEN 0 WHEN id = 75 THEN 1 ELSE 2 END), career_level DESC, `description`";
+            $top_dept = "";
+            $matches = [];
+            preg_match( '/^\\d/', strval( $dept ), $matches );
+            if( isset( $matches[0] ) && !empty( $matches[0] ) )
+                $top_dept = "WHEN department_id = $matches[0] THEN 2";
+
+            $sql = "SELECT id, `description`, `level`, department_id FROM cah.academic_categories WHERE department_id IN( $dept, 3 ) ORDER BY (CASE $top_dept WHEN id = 74 THEN 0 WHEN id = 75 THEN 1 ELSE 3 END), career_level DESC, `description`";
+            error_log( "Subdepartment query: $sql" );
+            return $sql;
         }
 
 
@@ -908,7 +963,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          * @return string The completed SQL.
          */
         private static function _faculty_sql( $dept ) : string {
-            return "SELECT DISTINCT u.id, u.lname, u.fname, CONCAT_WS(' ', u.fname, u.mname, u.lname) AS fullName, u.email, u.phone, t.description AS title, ud.prog_title_dept AS titleDept, ud.prog_title_dept_short AS titleDeptShort, t.title_group AS titleGroup, IF(u.photo_extra IS NOT NULL, CONCAT(u.photo_path, u.photo_extra), u.photo_path) AS photoUrl, u.interests, a.academic_id AS subDept, ac.description AS subDeptName, u.activities, u.awards, u.research, u.has_cv, u.homepage, u.biography AS bio, u.office, r.room, r.`desc`, r.building FROM cah.users AS u LEFT JOIN cah.users_departments AS ud ON u.id = ud.user_id LEFT JOIN cah.titles AS t ON t.id = ud.title_id LEFT JOIN cah.academics AS a ON a.user_id = u.id LEFT JOIN cah.academic_categories AS ac ON ac.id = a.academic_id LEFT JOIN ( SELECT rooms.id, rooms.room_number AS room, buildings.short_description AS `desc`, buildings.building_number AS building FROM cah.rooms LEFT JOIN buildings ON rooms.building_id = buildings.id) AS r ON r.id = u.room_id WHERE ud.department_id = $dept AND ud.active = 1 AND ud.show_web = 1 AND ud.affiliation = 'active' ORDER BY u.lname, u.fname";
+            return "SELECT DISTINCT u.id, u.lname, u.fname, CONCAT_WS(' ', u.fname, u.mname, u.lname) AS fullName, u.email, u.phone, t.description AS title, ud.prog_title_dept AS titleDept, ud.prog_title_dept_short AS titleDeptShort, t.title_group AS titleGroup, IF(u.photo_extra IS NOT NULL, CONCAT(u.photo_path, u.photo_extra), u.photo_path) AS photoUrl, u.interests, a.academic_id AS subDept, ac.description AS subDeptName, u.activities, u.awards, u.research, u.has_cv, u.homepage, u.biography AS bio, u.office, r.room, r.`desc`, r.building FROM cah.users AS u LEFT JOIN cah.users_departments AS ud ON u.id = ud.user_id LEFT JOIN cah.titles AS t ON t.id = ud.title_id LEFT JOIN cah.academics AS a ON a.user_id = u.id LEFT JOIN cah.academic_categories AS ac ON ac.id = a.academic_id LEFT JOIN ( SELECT rooms.id, rooms.room_number AS room, buildings.short_description AS `desc`, buildings.building_number AS building FROM cah.rooms LEFT JOIN buildings ON rooms.building_id = buildings.id) AS r ON r.id = u.room_id WHERE ud.department_id IN ( $dept ) AND ud.active = 1 AND ud.show_web = 1 AND ud.affiliation = 'active' ORDER BY u.lname, u.fname";
         }
 
 
@@ -1086,6 +1141,22 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
 
             // Return the modified $container
             return $container;
+        }
+
+
+        private static function _get_depts( $dept ) : string
+        {
+            $dept_str = "$dept";
+
+            if( $result = self::query( 'get-depts', $dept ) )
+            {
+                while( $row = mysqli_fetch_assoc( $result ) )
+                {
+                    $dept_str .= ", {$row['level']}";
+                }
+            }
+
+            return $dept_str;
         }
     }
 }

@@ -43,6 +43,8 @@ export default {
             'distUrl',
             'vertical',
             'tiered',
+            'multiLevel',
+            'isLoaded',
         ])
     },
 
@@ -63,55 +65,62 @@ export default {
             'setDetailUser',
             'changeFormat',
             'filterPersonList',
+            'setIsLoaded',
         ]),
     },
 
     // Called as soon as the app starts up, before anything is rendered
     created() {
 
-        // Checking any GET parameters, so we can display the right
-        // information on the page.
-        const pageURL = new URL(window.location.href);
-        const params = {};
+        this.$store.dispatch('facultyList/getFacultyList')
+            .then(() => {
+                // Checking any GET parameters, so we can display the right
+                // information on the page.
+                const pageURL = new URL(window.location.href);
+                const params = {};
 
-        pageURL.searchParams.forEach((value, key) => {
-            params[key] = value;
-        });
+                pageURL.searchParams.forEach((value, key) => {
+                    params[key] = value;
+                });
 
-        // Run through the parameters and see if we have an id or a
-        // subdepartment.
-        let found = false;
-        for (const [key, value] of Object.entries(params) ) {
+                // Run through the parameters and see if we have an id or a
+                // subdepartment.
+                let found = false;
+                for (const [key, value] of Object.entries(params) ) {
 
-            switch(key) {
-                // Check for ID first. If the URL has a valid ID, the
-                // subdepartment will be ignored.
-                case 'id':
-                    // If the requested ID is in our list, we display
-                    // that user's detail page with the setDetailUser()
-                    // action
-                    if (0 != value && Object.keys(this.personList).includes(value)) {
-                        found = true;
-                        this.$store.dispatch('facultyList/setDetailUser', value);
+                    console.log(`${key}: ${value}`)
+
+                    switch(key) {
+                        // Check for ID first. If the URL has a valid ID, the
+                        // subdepartment will be ignored.
+                        case 'id':
+                            // If the requested ID is in our list, we display
+                            // that user's detail page with the setDetailUser()
+                            // action
+                            if (0 != value && Object.keys(this.personList).includes(value)) {
+                                found = true;
+                                this.$store.dispatch('facultyList/setDetailUser', value);
+                            }
+                            break;
+
+                        // Check for subdepartment and filter the display list
+                        // accordingly.
+                        case 'subdept':
+                            if (Object.values(this.subDeptList).map(item => item.id).includes(value)) {
+                                found = true;
+                                this.$store.dispatch('subdepartments/selectDepartment', value);
+                            }
+                            break;
+                            
+                        default:
+                            break;
                     }
-                    break;
 
-                // Check for subdepartment and filter the display list
-                // accordingly.
-                case 'subdept':
-                    if (Object.values(this.subDeptList).map(item => item.id).includes(value)) {
-                        found = true;
-                        this.$store.dispatch('subdepartments/selectDepartment', value);
-                    }
-                    break;
-                    
-                default:
-                    break;
-            }
-
-            // If we've found something to change the display to, no need
-            // to keep looking
-            if (found) break;
-        }
-    }
+                    // If we've found something to change the display to, no need
+                    // to keep looking
+                    if (found) break;
+                }
+            })
+            .then(() => {this.setIsLoaded(true)})
+    },
 }

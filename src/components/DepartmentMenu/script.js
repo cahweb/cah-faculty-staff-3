@@ -62,6 +62,7 @@ export default {
             'filterable',
             'tiered',
             'btnColor',
+            'multiLevel',
         ]),
 
         // Mapping a getter for a store-level computed value.
@@ -81,6 +82,10 @@ export default {
                 : entry.shortName;
         },
 
+        notAdmin(name) {
+            return name !== 'Administration' && name !== 'Advising'
+        },
+
         // Handle changing the filtered menu list. We're not having
         // the component call the selectDepartment() action immediately,
         // because we need to update some classes first.
@@ -97,6 +102,8 @@ export default {
 
             // Make the current element .active
             document.querySelector(`#id-${target}`).classList.add('active');
+
+            document.querySelector('#main').scrollIntoView()
 
             // NOW we fire the selectDepartment() action
             this.selectDepartment(target);

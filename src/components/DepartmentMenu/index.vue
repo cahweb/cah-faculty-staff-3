@@ -33,7 +33,7 @@
                             :key="index"
                         >
                             <a class="nav-link"
-                                :class="{active: subDept.id == selected}"
+                                :class="{active: subDept.id == selected, 'has-header': multiLevel && notAdmin(subDept.name) && !subDept.isHeader, 'is-header': multiLevel && subDept.isHeader}"
                                 :id="`id-${subDept.id}`"
                                 :href="`${pageUrl}?subdept=${subDept.id}`"
                                 @click.prevent="setMenu(subDept.id)"

@@ -30,7 +30,7 @@ abstract class WordPressPluginHelper
     public abstract static function maybe_load_scripts( array $posts ) : array;
 
     // Register our shortcode's default settings and behaviors.
-    public abstract static function shortcode( $atts ) : string;
+    public abstract static function shortcode( $atts = [] ) : string;
 
     // Protected:
 

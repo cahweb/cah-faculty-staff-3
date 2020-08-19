@@ -24,7 +24,18 @@
             </div>
         </div>
         <dept-menu v-if="filterable"></dept-menu>
-        <div v-if="!displayList.length" class="loading-gif"></div>
+        <div v-if="!isLoaded && !displayList.length"
+            class="col-12 d-flex justify-content-center"
+            :class="{'col-md-9': filterable && !vertical}"
+        >
+            <div class="loading-gif"></div>
+        </div>
+        <div v-else-if="!displayList.length"
+            class="col-12 d-flex justify-content-center"
+            :class="{'col-md-9': filterable && !vertical}"
+        >
+            <p class="text-muted mt-5">Looks like there's no one here&hellip;</p>
+        </div>
         <div v-else-if="!isDetail" 
             class="col-12"
             :class="{'col-md-9': filterable && !vertical}"

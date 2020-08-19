@@ -51,17 +51,59 @@ export const actions = {
      */
     async setSubDeptList({commit}, subDeptList) {
 
-        const tempList = Object.entries(subDeptList).map(([id, name]) => {return {id, name}});
+        const tempList = Object.entries(subDeptList).map(([id, data]) => {return {id, name: data.desc, dept: data.deptID, isHeader: data.isHeader, code: data.deptCode !== undefined ? data.deptCode : undefined}});
 
-        /*
-        const tempList = [];
-        for(const [id, name] of Object.entries(subDeptList)) {
-            tempList.push({id, name});
+        const alphaSort = (a, b) => a.name.localeCompare(b.name)
+
+        const adminAdvise = []
+        const coreDepts = []
+        for (const item of tempList) {
+            if (item.name === "Administration" || item.name === "Advising" )
+                adminAdvise.push(item)
+            else
+                coreDepts.push(item)
         }
-        */
+
+        adminAdvise.sort(alphaSort)
+        coreDepts.sort((a, b) => {
+            if (a.isHeader && !b.isHeader)
+                return (parseInt(a.code) - 1) - parseInt(b.dept)
+            if (b.isHeader && !a.isHeader)
+                return (parseInt(b.code) - 1) - parseInt(a.dept)
+
+            const x = parseInt(a.dept)
+            const y = parseInt(b.dept)
+
+            if ((a.isHeader && b.isHeader) || x === y)
+                return alphaSort(a, b)
+
+            return x - y
+        })
+
+        const sortedList = [...adminAdvise, ...coreDepts]
         
         // Sort the list alphabetically
-        const sortedList = tempList.sort( (a, b) => a.name.localeCompare(b.name));
+        /*
+        const sortedList = tempList.sort((a, b) => {
+            
+            for (const obj of [a, b])
+            switch (obj.name) {
+                case 'Administration':
+                    obj.level = -3
+                    break
+                case 'Advising':
+                    obj.level = -2
+                    break
+                default:
+                    break
+            }
+
+            if (a.level === b.level)
+                return a.name.localeCompare(b.name)
+            else
+                return a.level < b.level ? -1 : 1
+        });
+        */
 
         // Call the mutation to update
         commit('updateSubDeptList', sortedList);
