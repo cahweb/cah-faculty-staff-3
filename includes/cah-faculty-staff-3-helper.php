@@ -106,6 +106,9 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
         public static function register_scripts() {
             if( is_admin() ) return;
 
+            $uri = CAH_FACULTY_3__PLUGIN_URL . 'dist';
+            $path = CAH_FACULTY_3__PLUGIN_DIR . 'dist';
+
             // Set up some variables to make the script calls more
             // readable
             $chunk_name = self::$plugin_name . "_chunk";
@@ -115,13 +118,13 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             $deps = array( 'jquery', 'script' );
 
             // Register the chunk file
-            wp_register_script( $chunk_name, CAH_FACULTY_3__PLUGIN_URL . "dist/js/chunk_cah-faculty-staff.js", $deps, self::$plugin_version, true );
+            wp_register_script( $chunk_name, "$uri/js/chunk_cah-faculty-staff.js", $deps, filemtime( "$path/js/chunk_cah-faculty-staff.js" ) , true );
 
             // Register the main script
-            wp_register_script( $main_name, CAH_FACULTY_3__PLUGIN_URL . "dist/js/cah-faculty-staff.js", array( $chunk_name ), self::$plugin_version, true );
+            wp_register_script( $main_name, "$uri/js/cah-faculty-staff.js", array( $chunk_name ), filemtime( "$path/js/cah-faculty-staff.js" ), true );
 
             // Register our CSS
-            wp_register_style( self::$plugin_name . "_style", CAH_FACULTY_3__PLUGIN_URL . "dist/css/cah-faculty-staff.css", array(), self::$plugin_version, 'all' );
+            wp_register_style( self::$plugin_name . "_style", "$uri/css/cah-faculty-staff.css", array(), filemtime( "$path/css/cah-faculty-staff.css" ), 'all' );
         }
 
 
