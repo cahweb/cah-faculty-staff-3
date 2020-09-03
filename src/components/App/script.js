@@ -122,7 +122,7 @@ export default {
                 }
             })
             .then(()=> {
-                if (this.tiered)
+                if (this.tiered && this.detailUser === 0 && this.selected === 0)
                     this.$store.dispatch('facultyList/filterPersonList', 0)
             })
             .then(() => {this.setIsLoaded(true)})
