@@ -772,7 +772,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                     // of HTML syntax highlighting in an IDE).
                     ob_start();
                     ?>
-                    <table class="table table-condensed table-bordered table-striped volumes" cellspacing="0" title="<?= $term_idx ?> Offered Courses">
+                    <table class="table table-condensed table-bordered table-striped volumes" cellspacing="0" title="<?= $term_idx ?> Offered Courses" style="font-size: 0.9rem">
                         <thead>
                             <tr>
                                 <th>Course Number</th>
@@ -812,7 +812,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
                                 <td><?= trim( $row['dateandtime'] ) ?></td>
                                 <td>
                                 <?php if( !empty( $row['syllabus_file'] ) ) : ?>
-                                    <a href="<?= $syllabus_url_base . str_replace( " ", "", $row['catalogref'] ) . $row['section'] . $row['term'] . '.pdf' ?>" rel="external">Available</a>
+                                    <a href="<?= $syllabus_url_base . str_replace( " ", "", $row['catalogref'] ) . $row['section'] . str_replace( " ", "", html_entity_decode( $row['term'] ) ) . '.pdf' ?>" rel="external">Available</a>
                                 <?php else : ?>
                                     Unavailable
                                 <?php endif; ?>
@@ -840,7 +840,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             <?php
             $term_labels = str_replace( ' ', '', $terms );
 
-            for( $c = 0; $c < count( $terms ); $c++ ) {
+            for( $c = 0; $c < count( $terms ) - 2; $c++ ) {
                 ?>
                     <li class="nav-item">
                         <a class="nav-link <?= !strcmp( $current_term, $terms[$c] ) ? 'active' : '' ?>" data-toggle="tab" href="#<?= $term_labels[$c] ?>" role="tab" aria-controls="<?= $term_labels[$c] ?>"><?= $terms[$c] ?></a>
@@ -855,9 +855,9 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             <?php
 
             // Now we build the content tabs
-            for( $c = 0; $c < count( $terms ); $c++ ) {
+            for( $c = 0; $c < count( $terms ) - 2; $c++ ) {
                 ?>
-                    <div class="pt-3 tab-pane <?= $c == 0 ? 'active' : '' ?>" id="<?= $term_labels[$c] ?>" role="tabpanel">
+                    <div class="pt-3 tab-pane <?= $c == 1 ? 'active' : '' ?>" id="<?= $term_labels[$c] ?>" role="tabpanel">
 
                 <?php if( !empty( $term_courses[$terms[$c]] ) ) : ?>
                     <?= $term_courses[$terms[$c]] ?>
