@@ -840,7 +840,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             <?php
             $term_labels = str_replace( ' ', '', $terms );
 
-            for( $c = 0; $c < count( $terms ) - 2; $c++ ) {
+            for( $c = 0; $c < count( $terms ); $c++ ) {
                 ?>
                     <li class="nav-item">
                         <a class="nav-link <?= !strcmp( $current_term, $terms[$c] ) ? 'active' : '' ?>" data-toggle="tab" href="#<?= $term_labels[$c] ?>" role="tab" aria-controls="<?= $term_labels[$c] ?>"><?= $terms[$c] ?></a>
@@ -1008,11 +1008,17 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             $today = strtotime( date('d.m.') . $year );
             $start = strtotime( "05.03.$year" );
 
+            $sql = '';
+
             if( $today > $start )
-                return $sql_start . $sql_end . " LIMIT 0, 5";
+                $sql =  $sql_start . $sql_end . " LIMIT 0, 5";
             
             else
-                return "$sql_start AND term != CONCAT( 'Summer ', YEAR( NOW() ) ) AND term != CONCAT( 'Fall ', YEAR( NOW() ) ) AND term != CONCAT( 'Spring ', ( YEAR( NOW() ) + 1 ) )$sql_end";
+                $sql = "$sql_start AND term != CONCAT( 'Summer ', YEAR( NOW() ) ) AND term != CONCAT( 'Fall ', YEAR( NOW() ) ) AND term != CONCAT( 'Spring ', ( YEAR( NOW() ) + 1 ) )$sql_end";
+
+            error_log( "Term SQL: $sql" );
+
+            return $sql;
         }
 
 
@@ -1027,7 +1033,11 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          */
         private static function _get_courses( $user_id, $term, $aux ) : string {
             
-            return "SELECT courses.id, number, IF( description IS NULL, \"No Description Available\", description ) AS description, CONCAT( prefix, catalog_number ) AS catalogref, syllabus_file, term, section, title, instruction_mode, session, CONCAT( meeting_days, ' ', class_start, ' - ', class_end ) AS dateandtime FROM courses LEFT JOIN users ON courses.user_id = users.id WHERE $term$aux AND ( user_id = $user_id OR suser_id = $user_id ) ORDER BY term, catalogref, title, number";
+            $sql = "SELECT courses.id, number, IF( description IS NULL, \"No Description Available\", description ) AS description, CONCAT( prefix, catalog_number ) AS catalogref, syllabus_file, term, section, title, instruction_mode, session, CONCAT( meeting_days, ' ', class_start, ' - ', class_end ) AS dateandtime FROM courses LEFT JOIN users ON courses.user_id = users.id WHERE $term$aux AND ( user_id = $user_id OR suser_id = $user_id ) ORDER BY term, catalogref, title, number";
+
+            error_log( "Courses SQL: $sql" );
+            
+            return $sql;
         }
 
 
