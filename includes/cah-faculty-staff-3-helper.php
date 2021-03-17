@@ -51,10 +51,10 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
         public static function setup() {
 
             // Register our scripts
-            add_action( 'wp_loaded', array( __CLASS__, 'register_scripts' ), 0, 10 );
+            add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 5, 0 );
 
             // Filter each page to conditionally load our Vue scripts
-            add_action( 'the_posts', array( __CLASS__, 'maybe_load_scripts'), 1, 10 );
+            add_action( 'wp_enqueue_scripts', array( __CLASS__, 'maybe_load_scripts'), 10, 0 );
             
             // Add our shortcode
             add_shortcode( 'cah_faculty', array( __CLASS__, 'shortcode' ) );
@@ -137,23 +137,16 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          * 
          * @return array
          */
-        public static function maybe_load_scripts( array $posts ) : array {
-            if( is_admin() ) return $posts;
+        public static function maybe_load_scripts() : array {
+            global $post;
 
             // Check to see if our shortcode is in use
-            foreach( $posts as $post ) {
-                if( stripos( $post->post_content, '[cah_faculty' ) !== false ) {
+            if( stripos( $post->post_content, '[cah_faculty' ) !== false ) {
 
-                    // If it is, load our stuff
-                    self::_load_scripts();
-                    self::_load_styles();
-                    break;
-                }
+                // If it is, load our stuff
+                self::_load_scripts();
+                self::_load_styles();
             }
-
-            // We don't actually mess with the $posts array at all, so
-            // we just pass it back to WordPress
-            return $posts;
         }
 
 
