@@ -27,7 +27,7 @@ abstract class WordPressPluginHelper
     // Check to see if we need to load the scripts we registered or not
     // (helps decrease network overhead by not loading scripts and
     // stylesheets where they won't be used).
-    public abstract static function maybe_load_scripts( array $posts ) : array;
+    public abstract static function maybe_load_scripts();
 
     // Register our shortcode's default settings and behaviors.
     public abstract static function shortcode( $atts = [] ) : string;

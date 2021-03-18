@@ -137,7 +137,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          * 
          * @return array
          */
-        public static function maybe_load_scripts() : array {
+        public static function maybe_load_scripts() {
             global $post;
 
             // Check to see if our shortcode is in use
