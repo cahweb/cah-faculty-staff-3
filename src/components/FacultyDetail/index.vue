@@ -31,7 +31,7 @@
             <list v-if="!!person.interests" :heading="'Research Interests'" :text="person.interests"></list>
             <list v-if="!!person.research" :heading="'Recent Research Activities'" :text="person.research"></list>
             <div v-if="!!person.pubs && person.pubs.length > 0" id="publications" v-html="formatPubs"></div>
-            <div v-if="person.courses.length" v-html="person.courses"></div>
+            <course-list v-if="!Array.isArray(person.courses) && Object.keys(person.courses).length > 0" :courseList="person.courses" />
         </div>
     </div>
 </template>

@@ -740,16 +740,57 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
             // Now we run the query to get the actual course list
             $result = self::query( 'courses', $user_id, $sql_term, $sql_aux );
 
-            // If we don't find anything (which we may, because not ever
+            // If we don't find anything (which we may, because not every
             // faculty or staff member will be actively teaching), we
-            // just return an empty string.
+            // just return an empty array.
             if( !$result ) {
-                mysqli_free_result( $result );
-                return '';
+                return [];
             }
 
             // Otherwise, we loop through the results
             while( $row = mysqli_fetch_assoc( $result ) ) {
+
+                // BEGIN NEW STUFF
+
+                // Create our index
+                $term_idx = trim( $row['term'] );
+
+                // I think this is mostly vestigial, at this point
+                if( stripos( $term_idx, 'summer' ) !== false )
+                {
+                    $summer_flag = true;
+                }
+
+                // A fresh array for each term as we loop through
+                if( !isset( $term_courses[$term_idx] ) || empty( $term_courses[$term_idx] ) )
+                {
+                    $term_courses[$term_idx] = [];
+                }
+
+                // We're basically just dumping everything we've got into an associative array, which will
+                // be turned into a JS object on the front-end.
+                $term_courses[$term_idx][] = [
+                    'number' => $row['number'],
+                    'catalogRef' => $row['catalogref'],
+                    'title' => $row['title'],
+                    'instructionMode' => $row['instruction_mode'],
+                    'session' => $row['session'],
+                    'meetingDays' => $row['meeting_days'],
+                    'startTime' => date( 'g:i A', strtotime( $row['class_start' ] ) ),
+                    'endTime' => date( 'g:i A', strtotime( $row['class_end'] ) ),
+                    'syllabusFile' => $row['syllabus_file'],
+                    'section' => $row['section'],
+                    'description' => $row['description'],
+                ];
+            }
+
+            mysqli_free_result( $result );
+
+            return $term_courses;
+
+                // END NEW STUFF
+
+                /* // BEGIN OLD STUFF
 
                 // The current term index
                 $term_idx = trim( $row['term'] );
@@ -820,6 +861,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
 
                 // Now add the output to the term's HTML
                 $term_courses[ $term_idx ] .= ob_get_clean();
+
             }
 
             // Free the result memory, since we don't need it anymore
@@ -866,6 +908,8 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
 
             // We return the whole buffer as the HTML course list.
             return ob_get_clean();
+
+            // END OLD STUFF */
         }
 
 
@@ -1026,7 +1070,7 @@ if( !class_exists( 'CAHFacultyStaffHelper3' ) ) {
          */
         private static function _get_courses( $user_id, $term, $aux ) : string {
             
-            $sql = "SELECT courses.id, number, IF( description IS NULL, \"No Description Available\", description ) AS description, CONCAT( prefix, catalog_number ) AS catalogref, syllabus_file, term, section, title, instruction_mode, session, CONCAT( meeting_days, ' ', class_start, ' - ', class_end ) AS dateandtime FROM courses LEFT JOIN users ON courses.user_id = users.id WHERE $term$aux AND ( user_id = $user_id OR suser_id = $user_id ) ORDER BY term, catalogref, title, number";
+            $sql = "SELECT courses.id, number, IF( description IS NULL, \"No Description Available\", description ) AS description, CONCAT( prefix, catalog_number ) AS catalogref, syllabus_file, term, section, title, instruction_mode, session, meeting_days, class_start, class_end FROM courses LEFT JOIN users ON courses.user_id = users.id WHERE $term$aux AND ( user_id = $user_id OR suser_id = $user_id ) ORDER BY term, catalogref, title, number";
 
             error_log( "Courses SQL: $sql" );
             

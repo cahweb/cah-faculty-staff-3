@@ -4,6 +4,8 @@
 import {mapState} from 'vuex';
 import FacultyDetailFormattedList from '../FacultyDetailFormattedList';
 import FacultyHeadshot from '../FacultyHeadshot';
+import CourseList from '../CourseList'
+
 import _ from 'underscore';
 
 export default {
@@ -11,6 +13,7 @@ export default {
     components: {
         'list': FacultyDetailFormattedList,
         'faculty-headshot': FacultyHeadshot,
+        'course-list': CourseList,
     },
 
     // Props we need. This can technically be given as an
