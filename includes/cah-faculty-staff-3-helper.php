@@ -8,11 +8,11 @@
  */
 
 // Require the db info
-require_once CAH_FACULTY_3__PLUGIN_DIR . '/priv/dbconfig.php';
+require_once CAH_FACULTY_3__PLUGIN_DIR . 'priv/dbconfig.php';
 use UCF\CAH\WordPress\Plugins\FacultyStaff;
 
 // Require the main plugin file, just in case
-require_once CAH_FACULTY_3__PLUGIN_DIR . '/cah-faculty-staff-3.php';
+require_once CAH_FACULTY_3__PLUGIN_DIR . 'cah-faculty-staff-3.php';
 
 // Require the admin file (currently does nothing)
 require_once 'cah-faculty-staff-3-admin.php';
