@@ -9,6 +9,7 @@ export default {
     data() {
         return{
             displayedTerm: '',
+            isLoaded: false,
         }
     },
     computed: {
@@ -35,6 +36,20 @@ export default {
             // Anything else (Sep–Dec) is Fall
             else {
                 term = 'Fall'
+            }
+
+            // Check to see if there's a summer term available, if we're in the Summer months
+            let hasSummer = false
+            for (const key of Object.keys(this.courseList)) {
+                if (/summer/i.test(key)){
+                    hasSummer = true
+                    break
+                }
+            }
+
+            // If there's no summer, default to Spring if we're in May or June, and Fall if we're in July or August
+            if (!hasSummer) {
+                term = month < 7 ? 'Spring' : 'Fall'
             }
 
             return `${term} ${year}`
